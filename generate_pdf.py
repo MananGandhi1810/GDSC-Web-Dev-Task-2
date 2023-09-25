@@ -35,6 +35,4 @@ def generate_invoice_pdf(invoice):
         row.cells.add(item.stock * item.price)
 
     page.paragraphs.add(table)
-
-    print('Saving invoice.pdf')
-    document.save('invoice.pdf')
+    document.save(f'invoice{invoice.id}.pdf')

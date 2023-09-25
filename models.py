@@ -1,7 +1,7 @@
-from pdf import generate_invoice_pdf
+from generate_pdf import generate_invoice_pdf
 
 class Item:
-    def __init__(self, id, name, stock, price):
+    def __init__(self, id:int, name:str, stock:int, price:int):
         self.id = id
         self.name = name
         self.stock = stock
@@ -14,7 +14,7 @@ class Item:
         return {'id': self.id, 'name': self.name, 'stock': self.stock, 'price': self.price}
 
 class Invoice:
-    def __init__(self, id, items, subtotal, taxes_percent, discount_percent):
+    def __init__(self, id:int, items:list, subtotal:int, taxes_percent:int, discount_percent:int):
         self.id = id
         self.items = items
         self.subtotal = subtotal
@@ -24,7 +24,7 @@ class Invoice:
         self.tax = (subtotal-self.discount) * taxes_percent / 100
         self.total = subtotal + self.tax - self.discount
 
-    def generate_pdf(self):
+    def generate_pdf_from_invoice(self):
         generate_invoice_pdf(self)
 
 
