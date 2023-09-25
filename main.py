@@ -24,7 +24,7 @@ class Invoice:
         self.tax = (subtotal-self.discount) * taxes_percent / 100
         self.total = subtotal + self.tax - self.discount
 
-    def generate_invoice_pdf(self):
+    def generate_pdf(self):
         generate_invoice_pdf(self)
 
 
