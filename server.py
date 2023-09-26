@@ -64,7 +64,7 @@ def update_item():
 
 @app.route('/delete_item', methods=['DELETE'])
 def delete_item():
-    item_id = request.args.get('id')
+    item_id = int(request.args.get('id'))
     if not item_id:
         return jsonify({'message': 'No item id provided!'})
     item = items_db.find_one({'id': item_id})
@@ -127,14 +127,14 @@ def new_invoice():
 
 @app.route('/delete_invoice', methods=['DELETE'])
 def delete_invoice():
-    invoice_id = request.args.get('id')
+    invoice_id = int(request.args.get('id'))
     if not invoice_id:
         return jsonify({'message': 'No invoice id provided!'})
     invoice = invoices_db.find_one({'id': invoice_id})
     if not invoice:
         return jsonify({'message': 'No invoice found!'})
     invoices_db.delete_one({'id': invoice_id})
-    os.remove(f'invoice{invoice_id}.pdf')
+    os.remove(f'invoices\\invoice{invoice_id}.pdf')
     return jsonify({'message': 'Invoice deleted successfully!'})
 
 @app.route('/update_invoice', methods=['PUT'])
@@ -151,35 +151,44 @@ def update_invoice():
     if not items and not discount_percent and not taxes_percent:
         return jsonify({'message': 'No parameters provided!'})
     items_list = invoice['items']
+    for item in items_list:
+        items_db_item = items_db.find_one({'id': item['id']})
+        items_db_item['stock'] += item['stock']
+        items_db.update_one({'id': item['id']}, {'$set': items_db_item})
     if items:
         items_list = []
         for item in items:
             items_db_item = items_db.find_one({'id': item['id']})
-            prev_stock = 0
-            for prev_item in invoice['items']:
-                if prev_item['id'] == item['id']:
-                    prev_stock = prev_item['stock']
-                    break
             if not items_db_item:
                 return jsonify({'message': f'Item for Item ID {item["id"]} not found!'})
             if items_db_item['stock'] < item['stock']:
                 return jsonify({'message': f'Not enough stock for Item ID {item["id"]}!'})
             items_list.append(Item(items_db_item['id'], items_db_item['name'], item['stock'], items_db_item['price']))
-            items_db_item['stock'] -= item['stock'] - prev_stock
+            items_db_item['stock'] -= item['stock']
+            items_db.update_one({'id': item['id']}, {'$set': items_db_item})
+        print(items_list)
         invoice['items'] = items_list
         subtotal = sum([item.stock * item.price for item in items_list])
     else:
-        subtotal = invoice['subtotal']
+        items = items_list
+        items_list = []
+        for item in items:
+            item_data = items_db.find_one({'id': item['id']})
+            items_list.append(Item(item_data['id'], item_data['name'], item['stock'], item_data['price']))
+        subtotal = sum([item.stock * item.price for item in items_list])
     if discount_percent:
         invoice['discount_percent'] = discount_percent
     if taxes_percent:
         invoice['taxes_percent'] = taxes_percent
-    invoice = Invoice(invoice_id, invoice['items'], subtotal, invoice['taxes_percent'], invoice['discount_percent'])
-    invoices_db.update_one({'id': invoice_id}, {'$set': invoice.to_dict()})
+    print(invoice['items'])
+    i = Invoice(invoice_id, items_list, subtotal, invoice['taxes_percent'], invoice['discount_percent'])
+    invoices_db.update_one({'id': invoice_id}, {'$set': i.to_dict()})
+    i.generate_pdf_from_invoice()
+    return jsonify({'message': 'Invoice updated successfully!', 'invoice_id': invoice_id})
 
 @app.route('/get_invoice_pdf', methods=['GET'])
 def get_invoice_pdf():
-    invoice_id = request.args.get('id')
+    invoice_id = int(request.args.get('id'))
     if not invoice_id:
         return jsonify({'message': 'No invoice id provided!'})
     invoice = invoices_db.find_one({'id': invoice_id})

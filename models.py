@@ -27,6 +27,8 @@ class Invoice:
     def generate_pdf_from_invoice(self):
         generate_invoice_pdf(self)
 
+    def __str__(self):
+        return f'{self.id}:{self.items}:{self.subtotal}:{self.taxes_percent}:{self.discount_percent}:{self.discount}:{self.tax}:{self.total}'
 
     def to_dict(self):
         return {'id': self.id, 'items': [item.to_dict() for item in self.items], 'subtotal': self.subtotal, 'taxes_percent': self.taxes_percent, 'discount_percent': self.discount_percent, 'discount': self.discount, 'tax': self.tax, 'total': self.total}
