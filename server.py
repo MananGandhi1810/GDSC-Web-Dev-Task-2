@@ -150,6 +150,7 @@ def update_invoice():
     taxes_percent = request.json.get('taxes_percent')
     if not items and not discount_percent and not taxes_percent:
         return jsonify({'message': 'No parameters provided!'})
+    items_list = invoice['items']
     if items:
         items_list = []
         for item in items:
@@ -165,8 +166,10 @@ def update_invoice():
                 return jsonify({'message': f'Not enough stock for Item ID {item["id"]}!'})
             items_list.append(Item(items_db_item['id'], items_db_item['name'], item['stock'], items_db_item['price']))
             items_db_item['stock'] -= item['stock'] - prev_stock
-        subtotal = sum([item.stock * item.price for item in items_list])
         invoice['items'] = items_list
+        subtotal = sum([item.stock * item.price for item in items_list])
+    else:
+        subtotal = invoice['subtotal']
     if discount_percent:
         invoice['discount_percent'] = discount_percent
     if taxes_percent:
@@ -182,6 +185,6 @@ def get_invoice_pdf():
     invoice = invoices_db.find_one({'id': invoice_id})
     if not invoice:
         return jsonify({'message': 'No invoice found!'})
-    return send_file(f'invoice{invoice_id}.pdf', as_attachment=True)
+    return send_file(f'invoices\invoice{invoice_id}.pdf', as_attachment=True)
 
 app.run(debug=True)
