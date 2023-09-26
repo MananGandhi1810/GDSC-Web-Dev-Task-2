@@ -22,23 +22,23 @@ The goal of the task was to develop an Inventory Management System. I have accom
 ### Routes
 - GET /get_all_items: Returns a list of all items in the inventory
     - Parameters - None
-![Get All Items](assets\get_all_items.png)
+![Get All Items](https://github.com/MananGandhi1810/GDSC-Web-Dev-Task-2/blob/main/assets\get_all_items.png)
 
 - GET /get_item?id={item_id}: Returns the item with the given id
     - Parameters - id (int)
-![Get Item 1](assets\get_item.png)
+![Get Item 1](https://github.com/MananGandhi1810/GDSC-Web-Dev-Task-2/blob/main/assets\get_item.png)
 
 - POST /add_item: Adds a new item to the inventory
     - Parameters - name (str), stock (int), price (float)
-![Add Item](assets\add_item.png)
+![Add Item](https://github.com/MananGandhi1810/GDSC-Web-Dev-Task-2/blob/main/assets\add_item.png)
 
 - PUT /update_item: Updates the item with the given id
     - Parameters - id (int), name (str), stock (int), price (float) (at least one of these parameters must be provided)
-![Update Item](assets\update_item.png)
+![Update Item](https://github.com/MananGandhi1810/GDSC-Web-Dev-Task-2/blob/main/assets\update_item.png)
 
 - DELETE /delete_item?id={item_id}: Deletes the item with the given id
     - Parameters - id (int)
-![Delete Item](assets\delete_item.png)
+![Delete Item](https://github.com/MananGandhi1810/GDSC-Web-Dev-Task-2/blob/main/assets\delete_item.png)
 
 ## Invoice class and routes
 ### Attributes
@@ -57,24 +57,24 @@ The goal of the task was to develop an Inventory Management System. I have accom
 ### Routes
 - GET /get_all_invoices: Returns a list of all invoices
     - Parameters - None
-    ![Get All Invoices](assets\get_all_invoices.png)
+    ![Get All Invoices](https://github.com/MananGandhi1810/GDSC-Web-Dev-Task-2/blob/main/assets\get_all_invoices.png)
 
 - GET /get_invoice?id={invoice_id}: Returns the invoice with the given id
     - Parameters - id (int)
-    ![Get Invoice](assets\get_invoice.png)
+    ![Get Invoice](https://github.com/MananGandhi1810/GDSC-Web-Dev-Task-2/blob/main/assets\get_invoice.png)
 
 - GET /get_invoice_pdf?id={invoice_id}: Returns the invoice with the given id in PDF format (example: [invoice1.pdf](https://github.com/MananGandhi1810/GDSC-Web-Dev-Task-2/blob/main/invoices/invoice1.pdf))
     - Parameters - id (int)
-    ![Get Invoice PDF](assets\get_invoice_pdf.png)
+    ![Get Invoice PDF](https://github.com/MananGandhi1810/GDSC-Web-Dev-Task-2/blob/main/assets\get_invoice_pdf.png)
 
 - POST /new_invoice: Adds a new invoice
     - Parameters - items (list of dicts), taxes_percent (float), discount_percent (float)
-    ![New Invoice](assets\new_invoice.png)
+    ![New Invoice](https://github.com/MananGandhi1810/GDSC-Web-Dev-Task-2/blob/main/assets\new_invoice.png)
 
 - PUT /update_invoice: Updates the invoice with the given id
     - Parameters - id (int), items (list of dicts), taxes_percent (float), discount_percent (float) (at least one of these parameters must be provided)
-    ![Update Invoice](assets\update_invoice.png)
+    ![Update Invoice](https://github.com/MananGandhi1810/GDSC-Web-Dev-Task-2/blob/main/assets\update_invoice.png)
 
 - DELETE /delete_invoice?id={invoice_id}: Deletes the invoice with the given id
     - Parameters - id (int)
-    ![Delete Invoice](assets\delete_invoice.png)
+    ![Delete Invoice](https://github.com/MananGandhi1810/GDSC-Web-Dev-Task-2/blob/main/assets\delete_invoice.png)
